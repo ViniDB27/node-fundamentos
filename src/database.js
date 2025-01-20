@@ -43,8 +43,13 @@ export class Database {
   update(table, id, data) {
     const rowIndex = this.#database[table].findIndex((row) => row.id === id);
     if (rowIndex > -1) {
-      this.#database[table][rowIndex] = { id, ...data };
+      this.#database[table][rowIndex] = { 
+        ...this.#database[table][rowIndex], 
+        ...data 
+      };
       this.#persist();
+    } else {
+      throw new Error(`Row with id not found`);
     }
   }
 
@@ -53,6 +58,8 @@ export class Database {
     if (rowIndex > -1) {
       this.#database[table].splice(rowIndex, 1);
       this.#persist();
+    } else {
+      throw new Error(`Row with id not found`);
     }
   }
 }
